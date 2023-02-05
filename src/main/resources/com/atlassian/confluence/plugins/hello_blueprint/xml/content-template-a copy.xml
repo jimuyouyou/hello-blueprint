@@ -1,0 +1,33 @@
+<ac:macro ac:name="info">
+    <ac:parameter ac:name="title"><at:var at:name="panelTitle" /></ac:parameter>
+    <ac:rich-text-body>
+        <p>Hello <at:var at:name="name" /></p>
+        <p><at:var at:name="friendlyDate" /></p>
+    </ac:rich-text-body>
+</ac:macro>
+<p>
+    The name in the Info box above was populated from the name you entered in the JavaScript dialog.<br/>
+    The date was supplied by a ContextProvider, which in turn retrieved its value from a Spring-injected service.
+</p>
+<p>
+    When you save this page you'll notice that a Parent page has been created for it, titled "Hello Blueprints". This
+    parent is the "Index" page which lists all Blueprints (Apps in the old parlance) of a particular type in this
+    Space.
+</p>
+<p>
+    If you don't want your Blueprint to take the user to the editor each time (perhaps the JavaScript dialog and
+    ContextProvider do all the heavy lifting), you can modify the "create-result" attribute of the "content-creator"
+    module in the atlassian-plugin.xml file to be "view" and not "edit".<br/>
+    If the result is "view", the new page will be created immediately and the user taken to it.
+</p>
+<ul>
+    <li><ac:placeholder>This is an example of instruction text that will get replaced when a user selects the text and begins typing.</ac:placeholder></li>
+</ul>
+<ac:task-list>
+    <ac:task>
+        <ac:task-status>incomplete</ac:task-status>
+        <ac:task-body><ac:placeholder ac:type="mention">@mention example. This placeholder will automatically search for a user to mention in the page when the user begins typing.</ac:placeholder></ac:task-body>
+    </ac:task>
+</ac:task-list>
+<!-- 'rawXhtml' parameter for 'var' makes this variable accept XHTML content without escaping it -->
+<p><at:var at:name="xhtmlString" at:rawXhtml='true'/></p>

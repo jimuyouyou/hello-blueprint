@@ -1,0 +1,9 @@
+<ac:macro ac:name="info">
+    <ac:parameter ac:name="title"><at:var at:name="panelTitle" /></ac:parameter>
+    <ac:rich-text-body>
+        <p>G'day <at:var at:name="name" /></p>
+    </ac:rich-text-body>
+</ac:macro>
+<p>
+    This is a second content template, chosen through the JavaScript wizard.
+</p>

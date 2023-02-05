@@ -1,0 +1,5 @@
+<p>
+    This is a "child" Blueprint's page. It was created when the "master" Blueprint was created.<br/>
+
+    It includes some data from a context provider: <at:var at:name="foo" />
+</p>

@@ -1,0 +1,36 @@
+#hello-blueprint-page-description {
+    resize: none;
+}
+
+#main-content {
+  background: #2193b0;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.custom-memo-wrapper .custom-memo-ul li{
+  color: #d32726;
+}
+
+#hello-blueprint-form input, #hello-blueprint-form textarea {
+    max-width: 300px;
+    width: 100%;
+    padding: 4px 5px;
+}
+
+.hello-blueprint-about {
+    float: right;
+    width: 300px;
+    padding: 20px;
+}
+
+.hello-blueprint-about > h1 {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* AUI overrides */
+
+#hello-blueprint-form fieldset {
+    padding: 0;
+}

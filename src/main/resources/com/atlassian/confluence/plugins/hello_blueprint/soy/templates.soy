@@ -1,0 +1,82 @@
+{namespace Confluence.Blueprints.Hello}
+
+/**
+ * Chooser form: First step of the wizard gives user a choice of two pages to go to next.
+ */
+{template .choosePathForm}
+    <form action="#" method="post" class="aui">
+        <fieldset class="group">
+            <legend><span>{getText('confluence.hello.blueprint.form.choose.label')}</span></legend>
+            <div class="radio">
+                <input class="radio" type="radio" checked="checked" name="greeting" id="helloRadio" value="hello">
+                <label for="helloRadio">{getText('confluence.hello.blueprint.form.choose.label.hello')}</label>
+            </div>
+            <div class="radio">
+                <input class="radio" type="radio" name="greeting" id="searchRadio" value="search">
+                <label for="searchRadio">{getText('confluence.hello.blueprint.form.choose.label.search')}</label>
+            </div>
+        </fieldset>
+    </form>
+{/template}
+
+
+/**
+ * Say Hello form: Second possible step, and last (check atlassian-plugin.xml, "last='true'" on this page description)
+ */
+{template .helloFormPage}
+    <form action="#" method="post" id="hello-blueprint-form" class="aui">
+        <fieldset>
+            <div class="field-group">
+                <label for="hello-blueprint-page-title">{getText('confluence.hello.blueprint.form.label.title')}<span class="aui-icon icon-required"> required</span></label>
+                <input id="hello-blueprint-page-title" class="text" type="text" name="title" title="title" placeholder="{getText('confluence.hello.blueprint.form.label.title.placeholder')}" maxlength="255">
+                <div class="error"></div>
+            </div>
+            <div class="field-group">
+                <label for="hello-blueprint-name">{getText('confluence.hello.blueprint.form.label.name')}<span class="aui-icon icon-required"> required</span></label>
+                <input id="hello-blueprint-name" class="text" type="text" name="name" title="name" placeholder="{getText('confluence.hello.blueprint.form.label.name.placeholder')}" maxlength="255">
+                <div class="error"></div>
+            </div>
+            <div class="field-group">
+                <label for="hello-blueprint-template-key">{getText('confluence.hello.blueprint.form.label.template.key')}</label>
+                <select id="hello-blueprint-template-key" class="select" name="contentTemplateKey">
+                    <option value="hello-blueprint-content-template-a">{getText('confluence.hello.blueprint.form.label.template.key.a')}</option>
+                    <option value="hello-blueprint-content-template-b">{getText('confluence.hello.blueprint.form.label.template.key.b')}</option>
+                </select>
+            </div>
+        </fieldset>
+    </form>
+{/template}
+
+
+/**
+ * Search form accepts a search term: another second possible step
+ */
+{template .searchFormPage}
+    <form action="#" method="post" id="hello-blueprint-form" class="aui">
+        <fieldset>
+            <h3>{getText('confluence.hello.blueprint.form.search.label.noDesc')}</h3>
+            <div class="field-group">
+                <label for="hello-blueprint-search">{getText('confluence.hello.blueprint.form.label.search')}<span class="aui-icon icon-required"> required</span></label>
+                <input id="hello-blueprint-search" class="text" type="text" name="search" title="search" placeholder="{getText('confluence.hello.blueprint.form.label.search.placeholder')}" maxlength="255">
+                <div class="error"></div>
+            </div>
+        </fieldset>
+    </form>
+{/template}
+
+/**
+ * Final step of one of the paths, following searchFormPage. Shows the entered term.
+ * @param search your search query
+ */
+{template .doSearchPage}
+    <h2>{getText('confluence.hello.blueprint.form.title.passed', $search)}</h2>
+{/template}
+
+/**
+ * How-to-use page for the wizard.
+ */
+{template .howToUse}
+    <h2>{getText('confluence.hello.blueprint.howtouse.title')}</h2>
+    <p>{getText('confluence.hello.blueprint.howtouse.content')}</p>
+{/template}
+

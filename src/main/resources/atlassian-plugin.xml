@@ -1,0 +1,276 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+    </plugin-info>
+
+    <!--
+        create-dialog-web-item allows the dialog launched by clicking the global "Create" button to be extended.
+
+            i18n-name-key: (required) the i18n key for the name of the Blueprint that will be displayed in the dialog
+
+            description: (required) the i18n key for the description of the Blueprint that will be displayed in the dialog.
+                         May end up being used in searches
+
+            resource: (required) the icon to be displayed in the dialog, must be a 200 x 150 px PNG
+
+            blueprintKey: (optional) if present, binds this web-item to the blueprint with this key. If omitted, no
+                         binding occurs and custom JavaScript + Java must create the content
+    -->
+
+    <web-item key="hello-blueprint-item" i18n-name-key="confluence.hello.blueprint.name" section="system.create.dialog/content">
+        <description key="confluence.hello.blueprint.description"/>
+        <resource name="icon" type="download" location="com/atlassian/confluence/plugins/hello_blueprint/images/preview.png"/>
+        <param name="blueprintKey" value="hello-blueprint"/>
+    </web-item>
+
+    <!--
+         blueprint groups together the main blueprint concepts:
+
+            index-key: (required) this is the name of the label that will be added to all content created from this blueprint, and used to
+                           bring this content together on the index page.
+
+            index-template-key: (optional) this is the moduleKey of the <content-template> that will be used to create an index page.
+                                    If none is provided, a default template will be used.
+
+            create-result: (optional) can be assigned the value of "view" or "edit".
+                "view": cause the editor to be bypassed - the required content will be created and the user immediately redirected to viewing it
+                "edit": user will be sent to the editor pre-filled
+
+            i18n-index-title-key: (optional) the i18n key for the title of the index page. Defaults to create-dialog-web-item name if none specified.
+    -->
+
+    <blueprint key="hello-blueprint" name="Hello Blueprint" i18n-name-key="confluence.hello.blueprint.name"
+            create-result="edit"
+            index-template-key="hello-blueprint-index"
+            i18n-index-title-key="confluence.hello.blueprint.index.page.title"
+            index-key="hello-blueprint"
+            how-to-use-template="Confluence.Blueprints.Hello.howToUse">
+        <!--
+            The content-template-key element(s) are the moduleKey(s) of the <content-template>(s) that will be used to
+            create a page / content from. These elements are required so that the templates can be edited from the
+            Space/Site Templates-admin screens.
+            -->
+        <content-template ref="hello-blueprint-content-template-a"/>
+        <content-template ref="hello-blueprint-content-template-b"/>
+        <!--
+            The dialog-wizard element defines a set of Wizard pages that will be shown when the User selects this
+            Blueprint. Pages will be shown to the user in the order they are defined, but this can be changed in the
+            Wizard JavaScript hooks (see hello-blueprint-wizard.js).
+        -->
+        <dialog-wizard key="file-list-blueprint-wizard">
+            <!--
+                dialog-page defines a single page of the Wizard. This page can contain a description that is displayed
+                 at the right-hand-side of it. This element contains the following attributes:
+
+                - id - the id of this page, used with JavaScript hooks
+                - template-key - the fully-qualified path to a Soy template provided by this plugin (see web-resource)
+                - title-key - the i18n key for the title that will be displayed at the top of the Wizard page
+                - description-header-key - (optional) if specified, the i18n key for the heading above the description
+                - description-content-key - (optional) if specified, the i18n key for the description content. This
+                                            is required for the Description panel to appear in the page.
+                - last - (optional) if set to "true", the Wizard will be complete when this page is submitted. This is
+                         useful if the Wizard can have multiple paths. The last defined dialog-page gets this value set
+                         to "true" by default.
+            -->
+            <dialog-page id="choosePathPageId"
+                         template-key="Confluence.Blueprints.Hello.choosePathForm"
+                         title-key="confluence.hello.blueprint.dialog.choose.title"
+                         description-header-key="confluence.hello.blueprint.dialog.choose.heading"
+                         description-content-key="confluence.hello.blueprint.dialog.choose.description"/>
+            <dialog-page id="helloFormPageId"
+                         template-key="Confluence.Blueprints.Hello.helloFormPage"
+                         title-key="confluence.hello.blueprint.dialog.hello.title"
+                         description-header-key="confluence.hello.blueprint.dialog.hello.heading"
+                         description-content-key="confluence.hello.blueprint.dialog.hello.description"
+                         last="true"/>
+            <dialog-page id="searchFormPageId"
+                         template-key="Confluence.Blueprints.Hello.searchFormPage"
+                         title-key="confluence.hello.blueprint.dialog.search.title"/>
+            <dialog-page id="doSearchPageId"
+                         template-key="Confluence.Blueprints.Hello.doSearchPage"
+                         title-key="confluence.hello.blueprint.dialog.search.title"/>
+        </dialog-wizard>
+    </blueprint>
+
+    <!--
+        content-template defines an XML resource in Confluence Storage-Format.
+
+            key: (required) referenced by the respective <blueprint>
+
+            i18n-name-key: (optional) used only when viewing this plugin in the Plugin Manager
+
+            description: (optional) used only when viewing this plugin in the Plugin Manager
+
+            resource: (required) the XML file containing the template content
+
+            context-provider: (optional) if present, will provide extra key-value pairs to be substituted against
+                              <at:var> instances in the template
+    -->
+    <content-template key="hello-blueprint-content-template-a"
+                      i18n-name-key="confluence.hello.blueprint.content.template.a.name">
+        <description key="confluence.hello.blueprint.content.template.a.description"/>
+        <resource name="template" type="download" location="com/atlassian/confluence/plugins/hello_blueprint/xml/content-template-a.xml"/>
+        <context-provider class="com.atlassian.confluence.plugins.hello_blueprint.HelloContextProvider"/>
+    </content-template>
+
+    <content-template key="hello-blueprint-content-template-b"
+            i18n-name-key="confluence.hello.blueprint.content.template.b.name">
+        <description key="confluence.hello.blueprint.content.template.b.description"/>
+        <resource name="template" type="download" location="com/atlassian/confluence/plugins/hello_blueprint/xml/content-template-b.xml"/>
+    </content-template>
+
+    <content-template key="hello-blueprint-index"
+                      i18n-name-key="confluence.hello.blueprint.index.template.name">
+        <description key="confluence.hello.blueprint.index.template.description"/>
+        <resource name="template" type="download" location="com/atlassian/confluence/plugins/hello_blueprint/xml/index.xml"/>
+    </content-template>
+
+    <resource type="i18n" name="i18n" location="com/atlassian/confluence/plugins/hello_blueprint/i18n"/>
+
+    <!--
+        Not strictly needed, just illustrates how a component/Spring-bean can be supplied to a Context Provider.
+    -->
+    <component key="hello-service" class="com.atlassian.confluence.plugins.hello_blueprint.DefaultHelloService">
+        <interface>com.atlassian.confluence.plugins.hello_blueprint.HelloService</interface>
+    </component>
+
+    <!--
+        (optional)
+
+        Provides JS and Soy resources if this Blueprint uses a JavaScript "wizard" to supply template variables, rather
+        than going directly to the edit or view screen.
+
+        dependency: (required) must depend on com.atlassian.confluence.plugins.confluence-create-content-plugin:blueprint-resources
+        context: (required) must be atl.general
+    -->
+    <web-resource name="Resources" key="resources">
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <transformation extension="soy">
+            <transformer key="soyTransformer">
+                <functions>com.atlassian.confluence.plugins.soy:soy-core-functions</functions>
+            </transformer>
+        </transformation>
+
+        <resource type="download" name="main.css" location="com/atlassian/confluence/plugins/hello_blueprint/css/main.css" />
+        <resource type="download" name="templates-soy.js" location="com/atlassian/confluence/plugins/hello_blueprint/soy/templates.soy" />
+        <resource type="download" name="hello-blueprint-wizard.js" location="com/atlassian/confluence/plugins/hello_blueprint/js/hello-blueprint-wizard.js" />
+
+        <dependency>com.atlassian.confluence.plugins.confluence-create-content-plugin:resources</dependency>
+        <dependency>com.atlassian.confluence.plugins.confluence-create-content-plugin:space-blueprints</dependency>
+        <dependency>com.atlassian.confluence.plugins.confluence-space-ia:spacesidebar</dependency>
+        <context>atl.general</context>
+        <context>atl.admin</context>
+    </web-resource>
+
+    <!--
+       The following modules are for a second distinct Blueprint.
+
+       The howdy blueprint is an example of a very minimal blueprint.
+
+       It uses the "view" option for its create-result which allows it to skip the editor and automatically create a page.
+    -->
+
+    <web-item key='view-result-blueprint-item' i18n-name-key='confluence.view.result.blueprint.name'
+              section='system.create.dialog/content'>
+        <description key='confluence.view.result.blueprint.description'/>
+        <resource name='icon' type='download'
+                  location='com/atlassian/confluence/plugins/hello_blueprint/images/preview.png'/>
+        <param name='blueprintKey' value='view-result-blueprint'/>
+    </web-item>
+
+    <blueprint key="view-result-blueprint" name="Howdy Blueprint" i18n-name-key='confluence.view.result.blueprint.name'
+               create-result="view"
+               index-key="howdy-blueprint">
+        <content-template ref="view-result-blueprint-content-template"/>
+    </blueprint>
+
+    <content-template key="view-result-blueprint-content-template"
+                      i18n-name-key="confluence.view.result.blueprint.content.template.name">
+        <description key="confluence.view.result.blueprint.content.template.description"/>
+        <resource name="template" type="download"
+                  location="com/atlassian/confluence/plugins/hello_blueprint/xml/view-content-template.xml"/>
+        <context-provider class="com.atlassian.confluence.plugins.hello_blueprint.ViewResultContextProvider"/>
+    </content-template>
+
+    <!--
+       The following modules are for a third distinct Blueprint.
+
+       This blueprint has child Blueprints, which create child Blueprint pages when the "root" Blueprint is created.
+       The child Blueprints must have content-templates that can be rendered with the context from any Wizard the root
+       Blueprint provides, plus any individual context-providers attached to those templates.
+
+       Note that the child Blueprints do not have associated Web-items - they are not displayed in the Create dialog.
+    -->
+
+    <content-template key="hierarchy-blueprint-content-template"
+            i18n-name-key="confluence.hierarchy.blueprint.content.template.name">
+        <description key="confluence.hierarchy.blueprint.content.template.description"/>
+        <resource name="template" type="download"
+                location="com/atlassian/confluence/plugins/hello_blueprint/xml/hierarchy-content-template.xml"/>
+        <context-provider class="com.atlassian.confluence.plugins.hello_blueprint.HierarchyContextProvider"/>
+    </content-template>
+
+    <content-template key="hierarchy-child-a-content-template"
+            i18n-name-key="confluence.hierarchy.child.a.blueprint.content.template.name">
+        <description key="confluence.hierarchy.child.a.blueprint.content.template.description"/>
+        <resource name="template" type="download"
+                location="com/atlassian/confluence/plugins/hello_blueprint/xml/hierarchy-child-a-content-template.xml"/>
+        <context-provider class="com.atlassian.confluence.plugins.hello_blueprint.HierarchyChildAContextProvider"/>
+    </content-template>
+
+    <content-template key="hierarchy-child-b-content-template"
+            i18n-name-key="confluence.hierarchy.child.b.blueprint.content.template.name">
+        <description key="confluence.hierarchy.child.b.blueprint.content.template.description"/>
+        <resource name="template" type="download"
+                location="com/atlassian/confluence/plugins/hello_blueprint/xml/hierarchy-child-b-content-template.xml"/>
+    </content-template>
+
+    <!--
+        The following modules are for a Space Blueprint... COMING SOON!!!
+        # content-template
+        # dialog-wizard
+    -->
+    <web-item key="hello-space-blueprint-item" i18n-name-key="confluence.hello.space.blueprint.name" section="system.create.space.dialog/content">
+        <description key="confluence.hello.blueprint.description"/>
+        <resource name="icon" type="download" location="com/atlassian/confluence/plugins/hello_blueprint/images/preview.png"/>
+        <param name="blueprintKey" value="my-space-blueprint"/>
+    </web-item>
+
+    <space-blueprint key="my-space-blueprint" i18n-name-key="confluence.hello.space.blueprint.name">
+        <content-template ref="hierarchy-blueprint-content-template">
+            <content-template ref="hierarchy-child-a-content-template"/>
+            <content-template ref="hierarchy-child-b-content-template"/>
+        </content-template>
+        <promoted-blueprints>
+            <blueprint ref="com.atlassian.confluence.plugins.hello-blueprint:hello-blueprint"/>
+            <blueprint ref="com.atlassian.confluence.plugins.hello-blueprint:view-result-blueprint"/>
+        </promoted-blueprints>
+        <!-- Needs to be a web-item, not a Blueprint. -->
+        <default-blueprint-item ref="view-result-blueprint-item"/>
+        <space-creation-steps>
+            <space-creation-step ref="com.atlassian.confluence.plugins.confluence-create-content-plugin:restrictedUserSpaceCreationStep"/>
+            <space-creation-step ref="com.atlassian.confluence.plugins.confluence-create-content-plugin:watchSpaceCreationStep"/>
+        </space-creation-steps>
+
+        <dialog-wizard key="my-space-blueprint-wizard">
+            <dialog-page id="spaceBasicDetailsId"
+                         template-key="Confluence.Templates.Blueprints.CreateSpace.createSpaceForm"
+                         title-key="confluence.hello.blueprint.dialog.choose.title"
+                         description-header-key="confluence.hello.blueprint.dialog.choose.heading"
+                         description-content-key="confluence.hello.blueprint.dialog.choose.description"/>
+        </dialog-wizard>
+    </space-blueprint>
+
+    <theme key="my-theme-key" name="Simple Space Theme" class="com.atlassian.confluence.themes.BasicTheme">
+        <description>A simple example theme for all</description>
+        <param name="includeClassicStyles" value="false"/>
+        <resource type="download" name="default-theme.css" location="/includes/css/default-theme.css">
+            <param name="source" value="webContext"/>
+        </resource>
+    </theme>
+
+</atlassian-plugin>

@@ -1,0 +1,28 @@
+<p>
+    Hello! This is the Index page for the "Hello Blueprint" Confluence Blueprint.
+    It contains listing of all pages in this space that were created with the Blueprint.
+</p>
+<p>
+    The content of this Index page can be changed by editing the plugin file "index.xml".<br/>
+    You can modify the page title by editing the "collector-title-key" attribute in the "content-creator"
+    element of your atlassian-plugin.xml file.<br/>
+    Note that only one Index page exists for each space, so to see any changes you'll need to delete or rename this
+    page, and then create a new "Hello Blueprint" page.
+</p>
+<p>
+    <ac:macro ac:name="content-report-table">
+        <ac:parameter ac:name="labels"><at:var at:name="templateLabel"/></ac:parameter>
+        <ac:parameter ac:name="analytics-key"><at:var at:name="analyticsKey"/></ac:parameter>
+        <ac:parameter ac:name="spaces"><at:var at:name="spaceKey"/></ac:parameter>
+    </ac:macro>
+</p>
+<ac:macro ac:name="info">
+<ac:parameter ac:name="title">Your new page isn't here?</ac:parameter>
+<ac:rich-text-body>
+    <p>
+        The list of Blueprint pages in this Index come from the Confluence search index, so you won't see your
+        new page until the Index is refreshed.<br/>
+        You can refresh the index now by going to <a href="http://localhost:1990/confluence/admin/viewindexqueue.action">Content Indexing</a> in the Admin console and clicking "Flush Queue".
+    </p>
+</ac:rich-text-body>
+</ac:macro>

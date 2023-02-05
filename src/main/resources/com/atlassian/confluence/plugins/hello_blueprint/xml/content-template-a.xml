@@ -1,0 +1,31 @@
+<ac:macro ac:name="info">
+    <ac:parameter ac:name="title"><at:var at:name="panelTitle" /></ac:parameter>
+    <ac:rich-text-body>
+        <p>Memo from <at:var at:name="name" /></p>
+        <p><at:var at:name="friendlyDate" /></p>
+    </ac:rich-text-body>
+</ac:macro>
+
+<div class='custom-memo-wrapper'>
+  <strong>Memorandum</strong>
+ 
+  <b>Subject</b>: Description of what memo is about
+
+  <ul class='custom-memo-ul'>
+    <li>Did you get my memo about the meeting?</li>
+    <li>Memo writing is something of an art form.</li>
+    <li>Provide concise but detailed information to the reader.</li>
+  </ul>
+</div>
+
+<ul>
+    <li><ac:placeholder>This is an example of instruction text that will get replaced when a user selects the text and begins typing.</ac:placeholder></li>
+</ul>
+<ac:task-list>
+    <ac:task>
+        <ac:task-status>incomplete</ac:task-status>
+        <ac:task-body><ac:placeholder ac:type="mention">@mention example. This placeholder will automatically search for a user to mention in the page when the user begins typing.</ac:placeholder></ac:task-body>
+    </ac:task>
+</ac:task-list>
+<!-- 'rawXhtml' parameter for 'var' makes this variable accept XHTML content without escaping it -->
+<p><at:var at:name="xhtmlString" at:rawXhtml='true'/></p>
